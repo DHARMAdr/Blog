@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level Up - Gaming Blog</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #0F0F0F;
+            --bg-card: #1A1A1A;
+            --accent-purple: #9D4EDD;
+            --accent-blue: #3A86FF;
+            --accent-cyan: #00D9FF;
+            --text-primary: #F5F5F5;
+            --text-secondary: #A0A0A0;
+            --border-color: #2A2A2A;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, rgba(157, 78, 221, 0.05) 100%);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: -2px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .search-container {
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 12px rgba(58, 134, 255, 0.3);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        /* Main Container */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 1rem;
+        }
+
+        /* Featured Post */
+        .featured-section {
+            margin-bottom: 4rem;
+        }
+
+        .featured-post {
+            background: linear-gradient(135deg, var(--bg-card) 0%, rgba(157, 78, 221, 0.1) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .featured-post:hover {
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 30px rgba(157, 78, 221, 0.2);
+            transform: translateY(-4px);
+        }
+
+        .featured-post::before {
+            content: 'FEATURED';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 0.7rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: var(--accent-cyan);
+            opacity: 0.6;
+        }
+
+        .featured-content h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .featured-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+
+        .featured-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .category-badge {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            background: rgba(157, 78, 221, 0.2);
+            color: var(--accent-purple);
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid var(--accent-purple);
+        }
+
+        .featured-image {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.6rem 1.2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+        }
+
+        .filter-btn.active {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+            color: var(--bg-dark);
+        }
+
+        /* Blog Grid */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .blog-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .blog-card:hover {
+            border-color: var(--accent-cyan);
+            transform: translateY(-8px);
+            box-shadow: 0 8px 32px rgba(0, 217, 255, 0.15);
+        }
+
+        .blog-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-cyan));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .blog-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .card-content {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-category {
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            line-height: 1.3;
+        }
+
+        .card-description {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            flex: 1;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .read-more {
+            color: var(--accent-blue);
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .read-more:hover {
+            color: var(--accent-cyan);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            padding: 2rem 1rem;
+            text-align: center;
+            color: var(--text-secondary);
+            margin-top: 4rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .search-container {
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .featured-post {
+                grid-template-columns: 1fr;
+            }
+
+            .featured-content h1 {
+                font-size: 1.8rem;
+            }
+
+            .featured-image {
+                height: 200px;
+            }
+
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">LEVEL UP</div>
+            <div class="search-container">
+                <input 
+                    type="text" 
+                    class="search-input" 
+                    id="searchInput" 
+                    placeholder="Search posts..."
+                    aria-label="Search blog posts"
+                >
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="featured-section" id="featuredSection"></section>
+
+        <section>
+            <div class="filters" id="filtersContainer"></div>
+            <div class="blog-grid" id="blogGrid"></div>
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <h2>No posts found</h2>
+                <p>Try adjusting your search or filters</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Level Up Gaming Blog. Level up your game knowledge.</p>
+    </footer>
+
+    <script>
+        // Blog data
+        const posts = [
+            {
+                id: 1,
+                title: "Baldur's Gate 3: Complete Build Guide for Beginners",
+                description: "Master the art of character creation and learn the best builds to dominate your playthrough.",
+                category: "Guide",
+                emoji: "⚔️",
+                date: "March 15, 2024",
+                readTime: "8 min",
+                featured: true
+            },
+            {
+                id: 2,
+                title: "Final Fantasy VII Rebirth Review: A Masterpiece Delivered",
+                description: "The continuation of Cloud's story is everything we hoped for and more. A comprehensive review.",
+                category: "Review",
+                emoji: "⚡",
+                date: "March 12, 2024",
+                readTime: "12 min",
+                featured: false
+            },
+            {
+                id: 3,
+                title: "Palworld: 10 Pro Tips for Beginners",
+                description: "Learn the essential mechanics and strategies to get ahead in this creature-collecting adventure.",
+                category: "Tips",
+                emoji: "🎯",
+                date: "March 10, 2024",
+                readTime: "6 min",
+                featured: false
+            },
+            {
+                id: 4,
+                title: "Helldivers 2: Best Loadouts for Each Mission Difficulty",
+                description: "Optimize your arsenal with our expert-tested loadout recommendations for maximum effectiveness.",
+                category: "Guide",
+                emoji: "🛸",
+                date: "March 8, 2024",
+                readTime: "7 min",
+                featured: false
+            },
+            {
+                id: 5,
+                title: "Dragon's Dogma 2: Hidden Secrets and Easter Eggs",
+                description: "Discover the best-kept secrets in Capcom's epic fantasy RPG. Spoiler-free exploration guide.",
+                category: "Guide",
+                emoji: "🐉",
+                date: "March 5, 2024",
+                readTime: "9 min",
+                featured: false
+            },
+            {
+                id: 6,
+                title: "Gaming Laptop Tier List 2024: Budget to Premium",
+                description: "Complete breakdown of the best gaming laptops at every price point. Updated with latest releases.",
+                category: "Hardware",
+                emoji: "💻",
+                date: "March 1, 2024",
+                readTime: "10 min",
+                featured: false
+            },
+            {
+                id: 7,
+                title: "Sea of Thieves: Advanced Sailing Techniques",
+                description: "Master the waves with advanced maneuvering, combat tactics, and treasure hunting strategies.",
+                category: "Tips",
+                emoji: "⛵",
+                date: "Feb 28, 2024",
+                readTime: "7 min",
+                featured: false
+            },
+            {
+                id: 8,
+                title: "Xbox Game Pass March 2024: What's New?",
+                description: "Check out the latest additions to Xbox Game Pass. Your next favorite game might be here.",
+                category: "News",
+                emoji: "📦",
+                date: "Feb 25, 2024",
+                readTime: "5 min",
+                featured: false
+            },
+            {
+                id: 9,
+                title: "Elden Ring DLC Preview: Everything We Know So Far",
+                description: "Shadow of the Erdtree is coming. Here's what FromSoftware has revealed about the expansion.",
+                category: "News",
+                emoji: "👑",
+                date: "Feb 20, 2024",
+                readTime: "6 min",
+                featured: false
+            }
+        ];
+
+        const categories = ["All", "Review", "Guide", "Tips", "News", "Hardware"];
+        let activeCategory = "All";
+        let searchQuery = "";
+
+        // Initialize
+        function init() {
+            renderFeatured();
+            renderFilters();
+            renderPosts();
+            setupEventListeners();
+        }
+
+        // Render featured post
+        function renderFeatured() {
+            const featured = posts.find(p => p.featured);
+            if (!featured) return;
+
+            const html = `
+                <div class="featured-post">
+                    <div class="featured-content">
+                        <h1>${featured.title}</h1>
+                        <p>${featured.description}</p>
+                        <div class="featured-meta">
+                            <span class="category-badge">${featured.category}</span>
+                            <span class="meta-item">${featured.date}</span>
+                            <span class="meta-item">${featured.readTime} read</span>
+                        </div>
+                        <a class="read-more" href="#${featured.id}">Read Full Article →</a>
+                    </div>
+                    <div class="featured-image">${featured.emoji}</div>
+                </div>
+            `;
+            document.getElementById('featuredSection').innerHTML = html;
+        }
+
+        // Render filter buttons
+        function renderFilters() {
+            const html = categories.map(cat => `
+                <button 
+                    class="filter-btn ${cat === activeCategory ? 'active' : ''}"
+                    data-category="${cat}"
+                >
+                    ${cat}
+                </button>
+            `).join('');
+            document.getElementById('filtersContainer').innerHTML = html;
+        }
+
+        // Render blog posts
+        function renderPosts() {
+            const filtered = posts.filter(post => {
+                const matchesCategory = activeCategory === "All" || post.category === activeCategory;
+                const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                    post.description.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchesCategory && matchesSearch && !post.featured;
+            });
+
+            const emptyState = document.getElementById('emptyState');
+            const grid = document.getElementById('blogGrid');
+
+            if (filtered.length === 0) {
+                emptyState.style.display = 'block';
+                grid.innerHTML = '';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+            grid.innerHTML = filtered.map(post => `
+                <article class="blog-card" id="${post.id}">
+                    <div class="card-image">${post.emoji}</div>
+                    <div class="card-content">
+                        <div class="card-category">${post.category}</div>
+                        <h2 class="card-title">${post.title}</h2>
+                        <p class="card-description">${post.description}</p>
+                        <div class="card-footer">
+                            <span>${post.date}</span>
+                            <a class="read-more" href="#${post.id}">Read →</a>
+                        </div>
+                    </div>
+                </article>
+            `).join('');
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Search
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                searchQuery = e.target.value;
+                renderPosts();
+            });
+
+            // Filters
+            document.getElementById('filtersContainer').addEventListener('click', (e) => {
+                if (e.target.classList.contains('filter-btn')) {
+                    document.querySelectorAll('.filter-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    e.target.classList.add('active');
+                    activeCategory = e.target.dataset.category;
+                    renderPosts();
+                }
+            });
+        }
+
+        // Start the app
+        init();
+    </script>
+</body>
+</html>
