@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level Up - Gaming Blog</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #0F0F0F;
+            --bg-card: #1A1A1A;
+            --accent-purple: #9D4EDD;
+            --accent-blue: #3A86FF;
+            --accent-cyan: #00D9FF;
+            --text-primary: #F5F5F5;
+            --text-secondary: #A0A0A0;
+            --border-color: #2A2A2A;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, rgba(157, 78, 221, 0.05) 100%);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--accent-purple);
+        }
+
+        .search-container {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 12px rgba(58, 134, 255, 0.3);
+        }
+
+        /* ── PROFILE ICON (top-right corner) ── */
+        .profile-icon-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-purple);
+            overflow: hidden;
+            cursor: pointer;
+            flex-shrink: 0;
+            background: var(--bg-card);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .profile-icon-btn:hover {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 12px rgba(0, 217, 255, 0.4);
+        }
+
+        .profile-icon-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-icon-btn .profile-placeholder {
+            font-size: 1.4rem;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 1rem;
+        }
+
+        .featured-section { margin-bottom: 4rem; }
+
+        .featured-post {
+            background: linear-gradient(135deg, var(--bg-card) 0%, rgba(157, 78, 221, 0.1) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .featured-content h1 { font-size: 2rem; margin-bottom: 1rem; }
+        .featured-content p { color: var(--text-secondary); margin-bottom: 1.5rem; }
+
+        .featured-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .meta-item { font-size: 0.9rem; color: var(--text-secondary); }
+
+        .category-badge {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            background: rgba(157, 78, 221, 0.2);
+            color: var(--accent-purple);
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            border: 1px solid var(--accent-purple);
+        }
+
+        .featured-image {
+            width: 100%;
+            height: 300px;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+        }
+
+        .featured-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.6rem 1.2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .filter-btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+
+        .filter-btn.active {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+            color: var(--bg-dark);
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .blog-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+
+        .blog-card:hover {
+            border-color: var(--accent-cyan);
+            transform: translateY(-4px);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            overflow: hidden;
+            /* default fallback gradient — overridden per category via inline style */
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-content { padding: 1.5rem; flex: 1; }
+
+        .card-category {
+            font-size: 0.75rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .card-title { font-size: 1.2rem; font-weight: bold; margin-bottom: 0.75rem; }
+
+        .card-description { font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 1rem; }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .read-more {
+            color: var(--accent-blue);
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .read-more:hover { color: var(--accent-cyan); }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state h2 { font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--text-primary); }
+
+        footer {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            padding: 2rem 1rem;
+            text-align: center;
+            color: var(--text-secondary);
+            margin-top: 4rem;
+        }
+
+        /* ══════════════════════════════════════
+           BIO MODAL  (existing, unchanged style)
+           ══════════════════════════════════════ */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show { display: flex; }
+
+        .modal-content {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--accent-purple);
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 0 50px rgba(157, 78, 221, 0.3);
+        }
+
+        .modal-close {
+            float: right;
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent-purple);
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        .modal-close:hover { color: var(--accent-cyan); }
+
+        .modal-title {
+            font-size: 1.8rem;
+            color: var(--accent-purple);
+            margin: 1rem 0;
+            clear: both;
+        }
+
+        .modal-bio {
+            font-size: 1rem;
+            line-height: 1.8;
+            margin: 1.5rem 0;
+            color: var(--text-primary);
+        }
+
+        .modal-links {
+            margin: 2rem 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .modal-link {
+            display: inline-block;
+            padding: 0.8rem 1.2rem;
+            background: var(--accent-purple);
+            color: var(--bg-dark);
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .modal-link:hover { background: var(--accent-cyan); transform: translateX(5px); }
+
+        /* ══════════════════════════════════════
+           PROFILE MODAL  (7:14 ≈ 1:2 ratio)
+           ══════════════════════════════════════ */
+        .profile-modal {
+            display: none;
+            position: fixed;
+            z-index: 1100;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-modal.show { display: flex; }
+
+        .profile-modal-content {
+            background: var(--bg-card);
+            border: 1px solid var(--accent-purple);
+            border-radius: 16px;
+            box-shadow: 0 0 60px rgba(157, 78, 221, 0.4);
+            /* 7:14 ratio = 1:2 */
+            width: min(360px, 90vw);
+            height: min(720px, 90vh);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1.5rem 2.5rem;
+            position: relative;
+        }
+
+        .profile-modal-close {
+            position: absolute;
+            top: 1rem; right: 1rem;
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: var(--accent-purple);
+            cursor: pointer;
+            border: none;
+            background: none;
+            line-height: 1;
+        }
+
+        .profile-modal-close:hover { color: var(--accent-cyan); }
+
+        .profile-pic-wrapper {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid var(--accent-purple);
+            overflow: hidden;
+            margin-top: 1rem;
+            margin-bottom: 1.2rem;
+            background: var(--bg-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .profile-pic-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-modal-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--accent-purple);
+            margin-bottom: 0.3rem;
+            text-align: center;
+        }
+
+        .profile-modal-tagline {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-modal-bio {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: var(--text-primary);
+            text-align: center;
+            margin-bottom: 1.8rem;
+        }
+
+        .profile-modal-links {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+        }
+
+        .profile-modal-link {
+            display: block;
+            padding: 0.75rem 1rem;
+            background: var(--accent-purple);
+            color: var(--bg-dark);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .profile-modal-link:hover {
+            background: var(--accent-cyan);
+            transform: translateY(-2px);
+        }
+
+        /* ══════════════════════════════════════
+           CHAT / MESSAGE WIDGET
+           ══════════════════════════════════════ */
+        .chat-trigger {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 900;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--accent-purple);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(157, 78, 221, 0.5);
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+        }
+
+        .chat-trigger:hover {
+            background: var(--accent-cyan);
+            transform: scale(1.1);
+            box-shadow: 0 4px 24px rgba(0, 217, 255, 0.5);
+        }
+
+        .chat-trigger svg { width: 26px; height: 26px; fill: #fff; }
+
+        /* chat box */
+        .chat-box {
+            position: fixed;
+            bottom: 6.5rem;
+            right: 2rem;
+            z-index: 900;
+            width: 320px;
+            background: var(--bg-card);
+            border: 1px solid var(--accent-purple);
+            border-radius: 12px;
+            box-shadow: 0 8px 40px rgba(157, 78, 221, 0.35);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-box.open { display: flex; }
+
+        .chat-box-header {
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue));
+            padding: 0.9rem 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-box-header span {
+            font-weight: bold;
+            color: #fff;
+            font-size: 0.95rem;
+        }
+
+        .chat-box-close {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.4rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .chat-box-body { padding: 1rem; display: flex; flex-direction: column; gap: 0.8rem; }
+
+        .chat-name-input,
+        .chat-textarea {
+            width: 100%;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.9rem;
+            padding: 0.6rem 0.8rem;
+            resize: none;
+        }
+
+        .chat-name-input:focus,
+        .chat-textarea:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        .chat-textarea { height: 120px; }
+
+        .chat-char-count {
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            text-align: right;
+            margin-top: -0.4rem;
+        }
+
+        .chat-char-count.over { color: #ff4d4d; }
+
+        .chat-send-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--accent-purple);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .chat-send-btn:hover { background: var(--accent-cyan); color: var(--bg-dark); }
+        .chat-send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .chat-status {
+            font-size: 0.82rem;
+            text-align: center;
+            min-height: 1.2rem;
+            color: var(--accent-cyan);
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 768px) {
+            .header-content { flex-direction: column; gap: 1rem; }
+            .featured-post { grid-template-columns: 1fr; }
+            .featured-content h1 { font-size: 1.5rem; }
+            .featured-image { height: 200px; }
+            .blog-grid { grid-template-columns: 1fr; }
+            .chat-box { width: calc(100vw - 2rem); right: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════
+     HEADER
+     ═══════════════════════════════════ -->
+<header>
+    <div class="header-content">
+        <div class="logo">@iamlazydanger</div>
+        <div class="search-container">
+            <input type="text" class="search-input" id="searchInput" placeholder="Search posts...">
+        </div>
+
+        <!-- PROFILE ICON — top right corner -->
+        <!-- 🔧 REPLACE THE src BELOW WITH YOUR PROFILE PICTURE URL -->
+        <button class="profile-icon-btn" onclick="showProfileModal()" title="View Profile">
+            <img
+                id="headerProfileImg"
+                src="YOUR_PROFILE_PICTURE_URL_HERE"
+                alt="Profile"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            >
+            <span class="profile-placeholder" style="display:none;">🎮</span>
+        </button>
+    </div>
+</header>
+
+<!-- ═══════════════════════════════════
+     MAIN
+     ═══════════════════════════════════ -->
+<main>
+    <section class="featured-section" id="featuredSection"></section>
+
+    <section>
+        <div class="filters" id="filtersContainer"></div>
+        <div class="blog-grid" id="blogGrid"></div>
+        <div class="empty-state" id="emptyState" style="display:none;">
+            <h2>No posts found</h2>
+            <p>Try adjusting your search or filters</p>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2026 Level Up Gaming Blog. Level up your game knowledge.</p>
+</footer>
+
+<!-- ═══════════════════════════════════
+     CHAT BUBBLE + BOX
+     ═══════════════════════════════════ -->
+<button class="chat-trigger" id="chatTrigger" onclick="toggleChat()" title="Send a message">
+    <!-- message bubble icon -->
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 2H4C2.9 2 2 2.9 2 4v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+    </svg>
+</button>
+
+<div class="chat-box" id="chatBox">
+    <div class="chat-box-header">
+        <span>💬 Message @iamlazydanger</span>
+        <button class="chat-box-close" onclick="toggleChat()">×</button>
+    </div>
+    <div class="chat-box-body">
+        <input type="text" class="chat-name-input" id="chatName" placeholder="Your name (optional)">
+        <textarea
+            class="chat-textarea"
+            id="chatMessage"
+            placeholder="Type your message… (max 300 characters)"
+            maxlength="300"
+            oninput="updateCharCount()"
+        ></textarea>
+        <div class="chat-char-count" id="charCount">0 / 300</div>
+        <button class="chat-send-btn" id="chatSendBtn" onclick="sendMessage()">Send Message</button>
+        <div class="chat-status" id="chatStatus"></div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     EXISTING BIO MODAL (surprise info)
+     ═══════════════════════════════════ -->
+<div class="modal" id="bioModal">
+    <div class="modal-content">
+        <button class="modal-close" onclick="closeBioModal()">&times;</button>
+        <div class="modal-title">🖤 Gamer 🖤 Reality is just my loading screen 🤖🎮</div>
+        <div class="modal-bio">
+            <strong>Fueled by caffeine, collecting epic moments 😮‍💨</strong><br><br>
+            Still learning... :)<br><br>
+            This is <strong>iamlazydanger</strong>, and the goal is simple: <strong>100% pure entertainment</strong>.<br><br>
+            Buckle up, hit subscribe, and let's play some games!
+        </div>
+        <div class="modal-links">
+            <a href="https://www.twitch.tv/iamlazydanger" target="_blank" class="modal-link">🟣 Twitch</a>
+            <a href="https://www.youtube.com/@iamlazydanger" target="_blank" class="modal-link">🔴 YouTube</a>
+            <a href="https://www.instagram.com/iamlazydanger" target="_blank" class="modal-link">📸 Instagram</a>
+            <a href="https://kick.com/iamlazydanger" target="_blank" class="modal-link">💜 Kick</a>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     PROFILE MODAL  (7:14 ratio)
+     ═══════════════════════════════════ -->
+<div class="profile-modal" id="profileModal">
+    <div class="profile-modal-content">
+        <button class="profile-modal-close" onclick="closeProfileModal()">×</button>
+
+        <!-- 🔧 REPLACE src WITH YOUR PROFILE PICTURE URL -->
+        <div class="profile-pic-wrapper">
+            <img
+                id="profileModalImg"
+                src="YOUR_PROFILE_PICTURE_URL_HERE"
+                alt="iamlazydanger"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+            >
+            <span style="display:none;">🎮</span>
+        </div>
+
+        <div class="profile-modal-name">@iamlazydanger</div>
+        <div class="profile-modal-tagline">🖤 Gamer 🖤 Reality is just my loading screen 🤖🎮</div>
+
+        <div class="profile-modal-bio">
+            <strong>Fueled by caffeine, collecting epic moments 😮‍💨</strong><br><br>
+            Still learning... :)<br><br>
+            This is <strong>iamlazydanger</strong>, and the goal is simple:<br>
+            <strong>100% pure entertainment.</strong><br><br>
+            Buckle up, hit subscribe, and let's play some games!
+        </div>
+
+        <div class="profile-modal-links">
+            <a href="https://www.twitch.tv/iamlazydanger" target="_blank" class="profile-modal-link">🟣 Twitch</a>
+            <a href="https://www.youtube.com/@iamlazydanger" target="_blank" class="profile-modal-link">🔴 YouTube</a>
+            <a href="https://www.instagram.com/iamlazydanger" target="_blank" class="profile-modal-link">📸 Instagram</a>
+            <a href="https://kick.com/iamlazydanger" target="_blank" class="profile-modal-link">💜 Kick</a>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     SCRIPT
+     ═══════════════════════════════════ -->
+<script>
+    /* ══════════════════════════════════════
+       ── EASY-EDIT IMAGE LINKS ──
+       Replace the placeholder URLs below with
+       your actual image URLs, then save.
+       ══════════════════════════════════════ */
+    var IMAGE_LINKS = {
+        /* Your profile picture shown in the header icon AND the profile modal */
+        profilePicture: "YOUR_PROFILE_PICTURE_URL_HERE",
+
+        /* Category card images — shown in the coloured thumbnail of each card.
+           Leave as "" to keep the default gradient + emoji.             */
+        review:   "",   /* 🔧 e.g. "https://i.imgur.com/abc.jpg"  */
+        guide:    "",   /* 🔧 e.g. "https://cdn.example.com/g.png" */
+        tips:     "",   /* 🔧 */
+        hardware: ""    /* 🔧 */
+    };
+
+    /* Apply profile picture wherever it is used */
+    function applyProfilePictures() {
+        if (IMAGE_LINKS.profilePicture && IMAGE_LINKS.profilePicture !== "YOUR_PROFILE_PICTURE_URL_HERE") {
+            var h = document.getElementById('headerProfileImg');
+            var m = document.getElementById('profileModalImg');
+            if (h) { h.src = IMAGE_LINKS.profilePicture; h.style.display = ''; }
+            if (m) { m.src = IMAGE_LINKS.profilePicture; m.style.display = ''; }
+        }
+    }
+
+    /* ══════════════════════════════════════
+       BLOG DATA
+       ══════════════════════════════════════ */
+    var posts = [
+        {
+            id: 1,
+            title: "Lazy Danger",
+            description: "Welcome to the streaming world! With a beginners setup and a gaming PC. Perfect for anyone starting their gaming journey!",
+            category: "Guide",
+            emoji: "🎬",
+            date: "March 1, 2000",
+            readTime: "8 min",
+            featured: true,
+            link: "#"
+        },
+        {
+            id: 2,
+            title: "MSI Gaming Motherboard X870 WiFi",
+            description: "The ultimate gaming motherboard for high-performance builds. Features PCIe 5.0 support, DDR5 memory compatibility, and built-in WiFi. Perfect for serious gamers and content creators.",
+            category: "Review",
+            emoji: "⚡",
+            date: "March 12, 2024",
+            readTime: "12 min",
+            featured: false,
+            link: "https://www.msi.com"
+        },
+        {
+            id: 3,
+            title: "Coco Sports RGB Keyboard & Mouse Set",
+            description: "Complete gaming peripherals with customizable RGB lighting, mechanical switches, and ergonomic design. Boost your gaming performance with professional-grade equipment.",
+            category: "Tips",
+            emoji: "⌨️",
+            date: "March 10, 2024",
+            readTime: "6 min",
+            featured: false,
+            link: "https://www.amazon.com"
+        },
+        {
+            id: 4,
+            title: "NVIDIA RTX 5060 Ti Graphics Card",
+            description: "Next-gen graphics power for high refresh rate gaming. Experience ray tracing, DLSS technology, and smooth gameplay at 1440p and beyond. Essential for modern gaming.",
+            category: "Guide",
+            emoji: "🎮",
+            date: "March 8, 2024",
+            readTime: "7 min",
+            featured: false,
+            link: "https://www.nvidia.com"
+        },
+        {
+            id: 5,
+            title: "AMD Ryzen 7 9800X3D Processor",
+            description: "The ultimate CPU for gaming. With 3D V-Cache technology, this processor delivers exceptional gaming performance and multitasking capabilities. Built for champions.",
+            category: "Hardware",
+            emoji: "🖥️",
+            date: "March 5, 2024",
+            readTime: "9 min",
+            featured: false,
+            link: "https://www.amd.com"
+        },
+        {
+            id: 6,
+            title: "Gaming PC Build Guide 2024",
+            description: "Complete breakdown of the best gaming PCs at every price point. From budget builds to high-end rigs, find the perfect setup for your gaming needs.",
+            category: "Hardware",
+            emoji: "💻",
+            date: "March 1, 2024",
+            readTime: "10 min",
+            featured: false,
+            link: "https://pcpartpicker.com"
+        }
+    ];
+
+    var categories = ["All", "Review", "Guide", "Tips", "Hardware"];
+    var activeCategory = "All";
+    var searchQuery = "";
+
+    /* Returns the category image URL or "" */
+    function getCategoryImage(category) {
+        var map = {
+            "Review":   IMAGE_LINKS.review,
+            "Guide":    IMAGE_LINKS.guide,
+            "Tips":     IMAGE_LINKS.tips,
+            "Hardware": IMAGE_LINKS.hardware
+        };
+        return map[category] || "";
+    }
+
+    /* ══════════════════════════════════════
+       RENDER FUNCTIONS
+       ══════════════════════════════════════ */
+    function showFeatured() {
+        var featuredPost = null;
+        for (var i = 0; i < posts.length; i++) {
+            if (posts[i].featured === true) { featuredPost = posts[i]; break; }
+        }
+        if (featuredPost === null) return;
+
+        var imgUrl = getCategoryImage(featuredPost.category);
+        var imageInner = imgUrl
+            ? '<img src="' + imgUrl + '" alt="' + featuredPost.title + '">'
+            : featuredPost.emoji;
+
+        var html = '<div class="featured-post">';
+        html += '<div class="featured-content">';
+        html += '<h1>' + featuredPost.title + '</h1>';
+        html += '<p>' + featuredPost.description + '</p>';
+        html += '<div class="featured-meta">';
+        html += '<span class="category-badge">' + featuredPost.category + '</span>';
+        html += '<span class="meta-item">' + featuredPost.date + '</span>';
+        html += '<span class="meta-item">' + featuredPost.readTime + ' read</span>';
+        html += '</div>';
+        html += '<a class="read-more" onclick="showBioModal(); return false;" href="#">surprise info →</a>';
+        html += '</div>';
+        html += '<div class="featured-image">' + imageInner + '</div>';
+        html += '</div>';
+
+        document.getElementById('featuredSection').innerHTML = html;
+    }
+
+    function showFilters() {
+        var html = '';
+        for (var i = 0; i < categories.length; i++) {
+            var cat = categories[i];
+            var ac = (cat === activeCategory) ? ' active' : '';
+            html += '<button class="filter-btn' + ac + '" data-category="' + cat + '">' + cat + '</button>';
+        }
+        document.getElementById('filtersContainer').innerHTML = html;
+
+        var buttons = document.querySelectorAll('.filter-btn');
+        for (var i = 0; i < buttons.length; i++) {
+            buttons[i].addEventListener('click', function() {
+                activeCategory = this.getAttribute('data-category');
+                showFilters();
+                showPosts();
+            });
+        }
+    }
+
+    function showPosts() {
+        var filtered = [];
+        for (var i = 0; i < posts.length; i++) {
+            var post = posts[i];
+            if (post.featured === true) continue;
+            var categoryMatch = activeCategory === "All" || post.category === activeCategory;
+            var sl = searchQuery.toLowerCase();
+            var searchMatch = post.title.toLowerCase().indexOf(sl) !== -1 ||
+                              post.description.toLowerCase().indexOf(sl) !== -1;
+            if (categoryMatch && searchMatch) filtered.push(post);
+        }
+
+        var gridEl  = document.getElementById('blogGrid');
+        var emptyEl = document.getElementById('emptyState');
+
+        if (filtered.length === 0) {
+            emptyEl.style.display = 'block';
+            gridEl.innerHTML = '';
+            return;
+        }
+
+        emptyEl.style.display = 'none';
+        var html = '';
+
+        for (var i = 0; i < filtered.length; i++) {
+            var post = filtered[i];
+            var imgUrl = getCategoryImage(post.category);
+            var cardInner = imgUrl
+                ? '<img src="' + imgUrl + '" alt="' + post.title + '">'
+                : post.emoji;
+
+            html += '<article class="blog-card">';
+            html += '<div class="card-image">' + cardInner + '</div>';
+            html += '<div class="card-content">';
+            html += '<div class="card-category">' + post.category + '</div>';
+            html += '<h2 class="card-title">' + post.title + '</h2>';
+            html += '<p class="card-description">' + post.description + '</p>';
+            html += '<div class="card-footer">';
+            html += '<span>' + post.date + '</span>';
+            html += '<a class="read-more" href="' + post.link + '" target="_blank">Read →</a>';
+            html += '</div>';
+            html += '</div>';
+            html += '</article>';
+        }
+
+        gridEl.innerHTML = html;
+    }
+
+    function start() {
+        applyProfilePictures();
+        showFeatured();
+        showFilters();
+        showPosts();
+
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            searchQuery = this.value;
+            showPosts();
+        });
+    }
+
+    start();
+
+    /* ══════════════════════════════════════
+       BIO MODAL
+       ══════════════════════════════════════ */
+    function showBioModal() { document.getElementById('bioModal').className = 'modal show'; }
+    function closeBioModal() { document.getElementById('bioModal').className = 'modal'; }
+
+    /* ══════════════════════════════════════
+       PROFILE MODAL
+       ══════════════════════════════════════ */
+    function showProfileModal() { document.getElementById('profileModal').className = 'profile-modal show'; }
+    function closeProfileModal() { document.getElementById('profileModal').className = 'profile-modal'; }
+
+    /* ══════════════════════════════════════
+       CHAT WIDGET
+       ══════════════════════════════════════ */
+    function toggleChat() {
+        var box = document.getElementById('chatBox');
+        box.classList.toggle('open');
+        if (box.classList.contains('open')) {
+            document.getElementById('chatStatus').textContent = '';
+        }
+    }
+
+    function updateCharCount() {
+        var msg  = document.getElementById('chatMessage').value;
+        var el   = document.getElementById('charCount');
+        var len  = msg.length;
+        el.textContent = len + ' / 300';
+        el.className = 'chat-char-count' + (len >= 300 ? ' over' : '');
+    }
+
+    function sendMessage() {
+        var name    = document.getElementById('chatName').value.trim();
+        var message = document.getElementById('chatMessage').value.trim();
+        var status  = document.getElementById('chatStatus');
+        var btn     = document.getElementById('chatSendBtn');
+
+        if (!message) {
+            status.style.color = '#ff4d4d';
+            status.textContent = 'Please type a message first.';
+            return;
+        }
+
+        btn.disabled = true;
+        status.style.color = 'var(--accent-cyan)';
+        status.textContent = 'Sending…';
+
+        /* ── EmailJS send ──
+           Uses EmailJS free tier (https://www.emailjs.com).
+           Fill in your Service ID, Template ID, and Public Key below.
+           Your template variables: {{from_name}}, {{message}}, {{to_email}}
+        */
+        var serviceId  = "YOUR_EMAILJS_SERVICE_ID";   /* 🔧 e.g. "service_abc123" */
+        var templateId = "YOUR_EMAILJS_TEMPLATE_ID";  /* 🔧 e.g. "template_xyz789" */
+        var publicKey  = "YOUR_EMAILJS_PUBLIC_KEY";   /* 🔧 e.g. "AbCdEfGhIjKlMnOp" */
+
+        var templateParams = {
+            from_name: name || "Anonymous Gamer",
+            message:   message,
+            to_email:  "dharmaraj.p2013@gmail.com"
+        };
+
+        /* Load EmailJS if not loaded yet, then send */
+        function doSend() {
+            emailjs.send(serviceId, templateId, templateParams, publicKey)
+                .then(function() {
+                    status.style.color = 'var(--accent-cyan)';
+                    status.textContent = '✅ Message sent! Thanks for reaching out.';
+                    document.getElementById('chatMessage').value = '';
+                    document.getElementById('chatName').value = '';
+                    document.getElementById('charCount').textContent = '0 / 300';
+                    btn.disabled = false;
+                })
+                .catch(function(err) {
+                    status.style.color = '#ff4d4d';
+                    status.textContent = '❌ Could not send. Check EmailJS setup.';
+                    console.error('EmailJS error:', err);
+                    btn.disabled = false;
+                });
+        }
+
+        if (typeof emailjs === 'undefined') {
+            var script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
+            script.onload = function() { doSend(); };
+            script.onerror = function() {
+                status.style.color = '#ff4d4d';
+                status.textContent = '❌ Could not load email service.';
+                btn.disabled = false;
+            };
+            document.head.appendChild(script);
+        } else {
+            doSend();
+        }
+    }
+
+    /* Close modals when clicking the dark backdrop */
+    window.addEventListener('click', function(e) {
+        var bioModal  = document.getElementById('bioModal');
+        var profModal = document.getElementById('profileModal');
+        if (e.target === bioModal)  bioModal.className  = 'modal';
+        if (e.target === profModal) profModal.className = 'profile-modal';
+    });
+</script>
+</body>
+</html>
